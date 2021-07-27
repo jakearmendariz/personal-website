@@ -50,19 +50,22 @@ const drawShots = (p, shots) => {
 
 export default function sketch(p){
     let canvas;
-    let direction, moving;
+    let direction, moving, tilting;
     let x, y;
     let ROCKET_SPEED;
     let ROCKET_HEIGHT;
     let ROCKET_WIDTH;
     let shots;
     let flame;
+    let tiltSpeed;
 
     p.setup = () => {
       canvas = p.createCanvas(p.windowWidth, p.windowHeight);
       p.noStroke();
       direction = 0;
       moving = false;
+      tilting = false;
+      tiltSpeed = 0;
       x = p.windowWidth/2;
       y = p.windowHeight*(3/4);
       ROCKET_SPEED = 0.010 * p.windowWidth;
@@ -70,7 +73,27 @@ export default function sketch(p){
       ROCKET_WIDTH = ROCKET_HEIGHT*(50 / 175);
       shots = [];
       flame = false;
+
+      // device orientation
+      if (window.DeviceOrientationEvent) {
+        window.addEventListener('deviceorientation', onOrientationChange);  
+      }
     }
+
+    function onOrientationChange(e) {
+        let alpha = e.alpha;
+        let beta = e.beta;
+        let gamma = e.gamma;
+        if(gamma == 0) {
+            tilting = false;
+        } else {
+            
+            tilting = true;
+            tiltSpeed = e.gamma;
+        }
+        console.log(alpha + " " + beta + " " + gamma);
+    }
+      
 
     function addShot() {
         console.log("added shot")
@@ -112,6 +135,9 @@ export default function sketch(p){
             }
         } else {
             moving = false;
+        }
+        if(tilting) {
+            x += tiltSpeed/2;
         }
         if (x < -1 * ROCKET_WIDTH) {
             x = p.width;
