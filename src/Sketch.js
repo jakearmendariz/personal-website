@@ -46,51 +46,75 @@ function random(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is inclusive and the minimum is inclusive
   }
 
+const SUN = 0;
+const PLANET = 1;
+const AST = 2;
 class Asteroid {
     constructor(x, y, radius, width) {
         this.x = x;
         this.y = y;
         this.radius = radius;
-        this.speed = 1/radius * width/2;
+        this.speed = 1/radius * width/4;
+        const ratio = (this.radius)/width;
+        if(ratio > 1/12){
+            this.type = SUN;
+            this.health = 3;
+          }else if(ratio > 1/18){
+            this.type = PLANET;
+            this.health = 2;
+          }else {
+            this.type = AST;
+            this.health = 1;
+          }
     }
 }
-const drawAsteroid = (p, asteroid) => {
-    const num = 50;
-    const grayvalues = 180 / num;
-    const diameter = (asteroid.radius*2);
-    const steps = diameter / num;
-    for (let i = 0; i < num; i++) {
-        p.fill((i+20) * grayvalues);
-        p.ellipse(asteroid.x, asteroid.y, diameter - i * steps, diameter - i * steps);
+
+const CIRCLES = 40;
+const SHADES = 120/CIRCLES;
+
+function fillForObj(p, asteroid, i) {
+    i += 25;
+    if(asteroid.type === SUN){
+      p.fill(205 + (i * i * SHADES) / 2, 205 + (i * SHADES) / 2, i * SHADES);
+    }else if(asteroid.type === PLANET){
+      p.fill(i * SHADES, i * SHADES, 245);
+    }else {
+      p.fill(i * SHADES);
     }
-    // p.ellipse(asteroid.x, asteroid.y, asteroid.radius, asteroid.radius)
+}
+
+const drawAsteroid = (p, asteroid) => {
+    const diameter = (asteroid.radius*2);
+    const steps = diameter / CIRCLES;
+    for (let i = 0; i < CIRCLES; i++) {
+        fillForObj(p, asteroid, i);
+        const currDiam = diameter - i * steps;
+        p.ellipse(asteroid.x, asteroid.y, currDiam, currDiam);
+    }
 }
 
 const drawAsteroids = (p, asteroids) => {
-    p.fill(150, 150, 150);
     asteroids.forEach(asteroid => {
         drawAsteroid(p, asteroid);
     });
 }
 
 const buildAsteroid = (p) => {
-    const asteroid = new Asteroid(random(1, p.width - 20), random(-1, -1*(p.height/2)), 
-            random(0.055 * p.width, 0.155 * p.width), p.width)
+    const radius = random(0.03 * p.width, 0.09 * p.width);
+    const asteroid = new Asteroid(random(1, p.width - 20), random(-1*radius, -1*p.height), 
+            radius, p.width)
     return asteroid;
 }
 
 const buildAsteroids = (p, n) => {
     let asteroids = [];
-    let i = 0;
-    while(i < n) {
+    for(let i = 0; i < n; i++) {
         asteroids.push(buildAsteroid(p))
-        i++;
     }
     return asteroids;
 }
 
 const drawShots = (p, shots) => {
-    // console.log(shots);
     p.fill(255, 238, 0);
     for (let i = 0; i < shots.length; i++) {
       p.rect(shots[i][0], shots[i][1], 6, 20);
@@ -98,19 +122,16 @@ const drawShots = (p, shots) => {
 }
 
 
-
 export default function sketch(p){
     let canvas;
     let direction, moving, tilting;
     let x, y;
-    let ROCKET_SPEED;
-    let ROCKET_HEIGHT;
-    let ROCKET_WIDTH;
-    let shots;
-    let flame;
+    let ROCKET_SPEED,ROCKET_HEIGHT, ROCKET_WIDTH;
+    let shots,flame;
     let tiltSpeed;
     let gameStarted;
     let asteroids;
+    let score;
 
     p.setup = () => {
       canvas = p.createCanvas(p.windowWidth, p.windowHeight);
@@ -128,6 +149,9 @@ export default function sketch(p){
       asteroids = buildAsteroids(p, 6);
       flame = false;
       gameStarted = false;
+      score = 0;
+      requestDeviceOrientation()
+
 
       // device orientation
       if (window.DeviceOrientationEvent) {
@@ -183,19 +207,41 @@ export default function sketch(p){
     function checkCollisons() {
         for (let i = 0; i < asteroids.length; i ++) {
             if(checkRocketCollisons(asteroids[i])) {
-                gameStarted = false;
+                score = 0;
                 asteroids = buildAsteroids(p, 6);
+                gameStarted = false;
             }
             else if(checkShotCollisons(asteroids[i])) {
-                asteroids[i] = buildAsteroid(p);
+                if (asteroids[i].health == 1) {
+                    asteroids[i] = buildAsteroid(p);
+                } else {
+                    asteroids[i].health -= 1;
+                }
+                score += 10;
+                if(score % 100 == 0) {
+                    asteroids.push(buildAsteroid(p))
+                }
             }
             
         }
     }
       
+    function requestDeviceOrientation () {
+        if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+            DeviceOrientationEvent.requestPermission()
+        .then(permissionState => {
+            if (permissionState === 'granted') {
+                window.addEventListener('deviceorientation', () => {});
+            }
+        })
+        .catch(console.error);
+        } else {
+            // handle regular non iOS 13+ devices
+            console.log ("not iOS");
+        }
+    }
 
     function addShot() {
-        console.log("added shot")
         gameStarted = true;
         let sx = Math.round(x + ROCKET_WIDTH / 2) - 3;
         let sy = Math.round(y - ROCKET_HEIGHT * (1 / 2));
@@ -242,6 +288,9 @@ export default function sketch(p){
         if(gameStarted) {
             updateAsteroids();
             drawAsteroids(p, asteroids);
+            p.textSize(p.width * 0.012);
+            p.fill(255, 255, 255);
+            p.text(score, 0.95 * p.width, 0.05 * p.height);
         }
         if (x < -1 * ROCKET_WIDTH) {
             x = p.width;
