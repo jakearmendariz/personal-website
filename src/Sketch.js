@@ -1,50 +1,61 @@
 /**
  * Terrible code because I copied it from stuff I wrote in 2018 (first year of code)
  */
-const drawRocket = (p, x, y, flame) => {
-  const r = 160;
-  const g = 1;
-  const b = 70;
-  const rocket_height = p.windowHeight * 0.085;
-  const rocket_width = rocket_height*(50 / 175);
-   //shaded p.rectangle
-  p.fill(220, 220, 220);
-  p.rect(x, y, rocket_width, rocket_height);
-  p.fill(200, 200, 200);
-  p.rect(x, y, rocket_width / 6, rocket_height);
-  p.fill(180, 180, 180);
-  p.rect(x + rocket_width / 3, y, (rocket_width * 2) / 3, rocket_height);
-  p.fill(130, 130, 130);
-  p.rect(x + (rocket_width * 2) / 3, y, (rocket_width * 1) / 3, rocket_height);
-  //wings and tip
-  p.fill(r, g, b);
-  p.triangle(x,y,x + rocket_width / 2,y - rocket_height * (7 / 16),x + rocket_width,y);
-  p.ellipse(x + rocket_width / 2, y + rocket_height * 0.01, rocket_width, rocket_height * 0.2);
-  p.fill(r + 20, g + 20, b + 20);
-  p.triangle(x,y + rocket_height,x - rocket_width / 2,y + rocket_height,x,y + rocket_height / 4);
-  p.fill(r, g, b);
-  p.triangle(x + (3 / 2) * rocket_width,y + rocket_height,x + rocket_width,y + rocket_height,x + rocket_width,y + rocket_height / 4);
-  p.triangle(x + rocket_width / 3,y + rocket_height,x + rocket_width * (2 / 3),y + rocket_height,x + rocket_width / 2,y + rocket_height / 4);
+const drawRocketBase = (p, rocket) => {
+    p.fill(220, 220, 220);
+    p.rect(rocket.x, rocket.y, rocket.width, rocket.height);
+    p.fill(200, 200, 200);
+    p.rect(rocket.x, rocket.y, rocket.width / 6, rocket.height);
+    p.fill(180, 180, 180);
+    p.rect(rocket.x + rocket.width / 3, rocket.y, (rocket.width * 2) / 3, rocket.height);
+    p.fill(130, 130, 130);
+    p.rect(rocket.x + (rocket.width * 2) / 3, rocket.y, (rocket.width * 1) / 3, rocket.height);
+}
 
-  // flame
-  if(flame) {
-    p.fill(255, 100, 10);
-    p.triangle(x,y + rocket_height,x + rocket_width,y + rocket_height,x + rocket_width / 2,y + rocket_height * (9 / 6));
-    p.fill(210, 230, 0);
-    p.triangle(x + rocket_width / 4,y + rocket_height,x + rocket_width - rocket_width / 4,y + rocket_height,x + rocket_width / 2,y + rocket_height * (8 / 6));
-  } else {
-    p.fill(255, 100, 10);
-    p.triangle(x,y + rocket_height,x + rocket_width,y + rocket_height,x + rocket_width / 2,y + rocket_height * (11 / 6));
-    p.fill(210, 230, 0);
-    p.triangle(x + rocket_width / 4,y + rocket_height,x + rocket_width - rocket_width / 4,y + rocket_height,x + rocket_width / 2,y + rocket_height * (10 / 6));
-  }
+const drawWingsAndTip = (p, rocket) => {
+    const r = 160, g = 1, b = 70;
+    p.fill(r, g, b);
+    p.triangle(rocket.x,rocket.y,rocket.x + rocket.width / 2,rocket.y - rocket.height * (7 / 16),rocket.x + rocket.width,rocket.y);
+    p.ellipse(rocket.x + rocket.width / 2, rocket.y + rocket.height * 0.01, rocket.width, rocket.height * 0.2);
+    p.fill(r + 20, g + 20, b + 20);
+    p.triangle(rocket.x,rocket.y + rocket.height,rocket.x - rocket.width / 2,rocket.y + rocket.height,
+        rocket.x,rocket.y + rocket.height / 4);
+    p.fill(r, g, b);
+    p.triangle(rocket.x + (3 / 2) * rocket.width,rocket.y + rocket.height,rocket.x + rocket.width,rocket.y + rocket.height,
+        rocket.x + rocket.width,rocket.y + rocket.height / 4);
+    p.triangle(rocket.x + rocket.width / 3,rocket.y + rocket.height,rocket.x + rocket.width * (2 / 3),
+        rocket.y + rocket.height,rocket.x + rocket.width / 2,rocket.y + rocket.height / 4);
+}
+
+const drawFlames = (p, rocket, flame) => {
+    if(flame) {
+        p.fill(255, 100, 10);
+        p.triangle(rocket.x,rocket.y + rocket.height,rocket.x + rocket.width,rocket.y + rocket.height,
+            rocket.x + rocket.width / 2,rocket.y + rocket.height * (9 / 6));
+        p.fill(210, 230, 0);
+        p.triangle(rocket.x + rocket.width / 4,rocket.y + rocket.height,rocket.x + rocket.width - rocket.width / 4,
+            rocket.y + rocket.height,rocket.x + rocket.width / 2,rocket.y + rocket.height * (8 / 6));
+      } else {
+        p.fill(255, 100, 10);
+        p.triangle(rocket.x,rocket.y + rocket.height,rocket.x + rocket.width,rocket.y + rocket.height,
+            rocket.x + rocket.width / 2,rocket.y + rocket.height * (11 / 6));
+        p.fill(210, 230, 0);
+        p.triangle(rocket.x + rocket.width / 4,rocket.y + rocket.height,rocket.x + rocket.width - rocket.width / 4,
+            rocket.y + rocket.height,rocket.x + rocket.width / 2,rocket.y + rocket.height * (10 / 6));
+      }
+}
+
+const drawRocket = (p, rocket, flame) => {
+  drawRocketBase(p, rocket);
+  drawWingsAndTip(p, rocket);
+  drawFlames(p, rocket, flame); 
 }
 
 function random(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is inclusive and the minimum is inclusive
-  }
+}
 
 const SUN = 0;
 const PLANET = 1;
@@ -69,10 +80,23 @@ class Asteroid {
     }
 }
 
+class Rocket {
+    constructor(x,y, width, height) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+
+        this.speed = 0.010 * width;
+        this.height = height * 0.085;
+        this.width = this.height*(50 / 175);
+    }
+}
+
 const CIRCLES = 40;
 const SHADES = 120/CIRCLES;
 
-function fillForObj(p, asteroid, i) {
+function fillAsteroid(p, asteroid, i) {
     i += 25;
     if(asteroid.type === SUN){
       p.fill(205 + (i * i * SHADES) / 2, 205 + (i * SHADES) / 2, i * SHADES);
@@ -87,7 +111,7 @@ const drawAsteroid = (p, asteroid) => {
     const diameter = (asteroid.radius*2);
     const steps = diameter / CIRCLES;
     for (let i = 0; i < CIRCLES; i++) {
-        fillForObj(p, asteroid, i);
+        fillAsteroid(p, asteroid, i);
         const currDiam = diameter - i * steps;
         p.ellipse(asteroid.x, asteroid.y, currDiam, currDiam);
     }
@@ -123,10 +147,8 @@ const drawShots = (p, shots) => {
 
 
 export default function sketch(p){
-    let canvas;
     let direction, moving, tilting;
-    let x, y;
-    let ROCKET_SPEED,ROCKET_HEIGHT, ROCKET_WIDTH;
+    let rocket;
     let shots,flame;
     let tiltSpeed;
     let gameStarted;
@@ -134,25 +156,24 @@ export default function sketch(p){
     let score;
 
     p.setup = () => {
-      canvas = p.createCanvas(p.windowWidth, p.windowHeight);
+      p.createCanvas(p.windowWidth, p.windowHeight);
       p.noStroke();
       direction = 0;
       moving = false;
       tilting = false;
       tiltSpeed = 0;
-      x = p.windowWidth/2;
-      y = p.windowHeight*(3/4);
-      ROCKET_SPEED = 0.010 * p.windowWidth;
-      ROCKET_HEIGHT = p.windowHeight * 0.085;
-      ROCKET_WIDTH = ROCKET_HEIGHT*(50 / 175);
+      rocket = new Rocket(
+        p.windowWidth/2,
+        p.windowHeight*(3/4),
+        p.windowWidth,
+        p.windowHeight
+        );
       shots = [];
       asteroids = buildAsteroids(p, 6);
       flame = false;
       gameStarted = false;
       score = 0;
       requestDeviceOrientation()
-
-
       // device orientation
       if (window.DeviceOrientationEvent) {
         window.addEventListener('deviceorientation', onOrientationChange);  
@@ -184,8 +205,8 @@ export default function sketch(p){
 
     function checkRocketCollisons(asteroid) {
         const rocketWidth = p.windowHeight * 0.085 *(50.0 / 175);
-        return ((((Math.abs(asteroid.x - x) < asteroid.radius) && (Math.abs((asteroid.y - y)) < asteroid.radius))
-            || ((Math.abs(asteroid.x - (x + rocketWidth))) < asteroid.radius) && (Math.abs((asteroid.y - y)) < asteroid.radius)));
+        return ((((Math.abs(asteroid.x - rocket.x) < asteroid.radius) && (Math.abs((asteroid.y - rocket.y)) < asteroid.radius))
+            || ((Math.abs(asteroid.x - (rocket.x + rocketWidth))) < asteroid.radius) && (Math.abs((asteroid.y - rocket.y)) < asteroid.radius)));
     }
 
     function distance(x1, y1, x2, y2) {
@@ -212,13 +233,13 @@ export default function sketch(p){
                 gameStarted = false;
             }
             else if(checkShotCollisons(asteroids[i])) {
-                if (asteroids[i].health == 1) {
+                if (asteroids[i].health === 1) {
                     asteroids[i] = buildAsteroid(p);
                 } else {
                     asteroids[i].health -= 1;
                 }
                 score += 10;
-                if(score % 100 == 0) {
+                if(score % 100 === 0) {
                     asteroids.push(buildAsteroid(p))
                 }
             }
@@ -243,8 +264,8 @@ export default function sketch(p){
 
     function addShot() {
         gameStarted = true;
-        let sx = Math.round(x + ROCKET_WIDTH / 2) - 3;
-        let sy = Math.round(y - ROCKET_HEIGHT * (1 / 2));
+        let sx = Math.round(rocket.x + rocket.width / 2) - 3;
+        let sy = Math.round(rocket.y - rocket.height * (1 / 2));
         shots.push([sx,sy]);
     }
 
@@ -269,13 +290,13 @@ export default function sketch(p){
         if(p.keyIsPressed) {
             if(moving) {
                 if (direction === 0) {
-                    y -= ROCKET_SPEED;
+                    rocket.y -= rocket.speed;
                 } else if (direction === 1) {
-                    x += ROCKET_SPEED;
+                    rocket.x += rocket.speed;
                 } else if (direction === 2) {
-                    y += ROCKET_SPEED;
+                    rocket.y += rocket.speed;
                 } else if (direction === 3) {
-                    x -= ROCKET_SPEED;
+                    rocket.x -= rocket.speed;
                 } else {
                 }
             }
@@ -283,25 +304,25 @@ export default function sketch(p){
             moving = false;
         }
         if(gameStarted && tilting) {
-            x += Math.round(tiltSpeed/3);
+            rocket.x += Math.round(tiltSpeed/3);
         }
         if(gameStarted) {
             updateAsteroids();
             drawAsteroids(p, asteroids);
-            p.textSize(p.width * 0.012);
+            p.textSize(p.width * 0.009 + 10);
             p.fill(255, 255, 255);
             p.text(score, 0.95 * p.width, 0.05 * p.height);
         }
-        if (x < -1 * ROCKET_WIDTH) {
-            x = p.width;
-        } else if (x >= p.width + ROCKET_WIDTH) {
-            x = -1 * ROCKET_WIDTH;
+        if (rocket.x < -1 * rocket.width) {
+            rocket.x = p.width;
+        } else if (rocket.x >= p.width + rocket.width) {
+            rocket.x = -1 * rocket.width;
         }
     
-        if (y + ROCKET_HEIGHT > p.height) {
-            y = p.height - ROCKET_HEIGHT;
-        } else if (y < 0) {
-            y = 0;
+        if (rocket.y + rocket.width > p.height) {
+            rocket.y = p.height - rocket.width;
+        } else if (rocket.y < 0) {
+            rocket.y = 0;
         }
         for (let i = 0; i < shots.length; i++) {
             shots[i][1] -= 0.015*p.height;
@@ -316,7 +337,7 @@ export default function sketch(p){
         p.background(13,61,90);
         checkCollisons()
         updateRocket()
-        drawRocket(p, x, y, flame);
+        drawRocket(p, rocket, flame);
         drawShots(p, shots);
     }
 }
