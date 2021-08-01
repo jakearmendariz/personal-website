@@ -311,7 +311,7 @@ export default function sketch(p){
             drawAsteroids(p, asteroids);
             p.textSize(p.width * 0.009 + 10);
             p.fill(255, 255, 255);
-            p.text(score, 0.95 * p.width, 0.05 * p.height);
+            p.text(score, 0.98 * p.width-30, 0.05 * p.height);
         }
         if (rocket.x < -1 * rocket.width) {
             rocket.x = p.width;
