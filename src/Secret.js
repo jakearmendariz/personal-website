@@ -1,4 +1,4 @@
-import './Secret.css';
+import './css/Secret.css';
 
 
 function Secret() {

@@ -243,7 +243,6 @@ export default function sketch(p){
                     asteroids.push(buildAsteroid(p))
                 }
             }
-            
         }
     }
       

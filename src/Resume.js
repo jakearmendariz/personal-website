@@ -1,4 +1,4 @@
-import './Resume.css';
+import './css/Resume.css';
 import {Link} from 'react-router-dom';
 import {BiArrowBack} from 'react-icons/bi'
 // import View from 'react'
@@ -17,8 +17,8 @@ function Resume() {
             </h1>
             <h3>Interests</h3>
             <p>I am fascinated by software. I enjoy writing code, designing architectures, and learning about the complexity within software systems.
-                Currently, I am most interested in working with high request per second systems. Along with a personal interest 
-                in the Rust Programming languge and the Rust compiler.
+                Currently, I am most interested in scalable system software. Along with a personal interest 
+                in the Rust Programming languge/compiler.
             </p>
             {/* <br></br> */}
             <h3>
@@ -33,10 +33,10 @@ function Resume() {
             <h3>
                 Work Experience
             </h3>
-            <b>Facebook Fall 2021</b>Team and Project TBD<br />
+            <b>Facebook Fall 2021</b>Security and Infrastructure<br />
             <b>Amazon Summer 2021</b>Working on Alexa Device Demos Team. Added support to change Alexa's visual and voice responses 
             towards prohibited intents. Allowing sales and our organizational partners to choose different responses for their organization, 
-            or for groups of devices. Working primarily with a Java backend and Python for database migration.
+            or for groups of devices. Working with a Java backend and Python for database migration.
 
             <b>CDK Summer 2020</b>Engineered a backend in Flask that connects car dealerships with Fortellis API to retrieve and display their
             vehicle inventory, information, and images. Helping CDK compete with online retailers such as Carvana.

@@ -1,4 +1,4 @@
-import './App.css';
+// import './css/App.css';
 import Home from './Home.js';
 import Secret from './Secret.js';
 import Resume from './Resume.js';

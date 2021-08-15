@@ -1,4 +1,4 @@
-import './App.css';
+import './css/App.css';
 import Typist from 'react-typist';
 import { SocialIcon } from 'react-social-icons';
 import Container from 'react-bootstrap/Container'
