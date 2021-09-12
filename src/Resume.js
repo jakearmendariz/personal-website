@@ -1,11 +1,6 @@
 import './css/Resume.css';
 import {Link} from 'react-router-dom';
 import {BiArrowBack} from 'react-icons/bi'
-// import View from 'react'
-
-
-// import Button from 'react-bootstrap/Button'
-
 
 function Resume() {
   return (
@@ -33,10 +28,10 @@ function Resume() {
             <h3>
                 Work Experience
             </h3>
-            <b>Facebook Fall 2021</b>Security and Infrastructure<br />
-            <b>Amazon Summer 2021</b>Working on Alexa Device Demos Team. Added support to change Alexa's visual and voice responses 
-            towards prohibited intents. Allowing sales and our organizational partners to choose different responses for their organization, 
-            or for groups of devices. Working with a Java backend and Python for database migration.
+            <b>Facebook Fall 2021</b>Working in security and infrastructure.<br />
+            <b>Amazon Summer 2021</b>Worked on managed Alexa devices, adding a feature to allow 
+            stakeholders to instantly customize the response to restricted behaviors. Migrated ten 
+            thousand live devices, deployed all around the US and soon internationally.
 
             <b>CDK Summer 2020</b>Engineered a backend in Flask that connects car dealerships with Fortellis API to retrieve and display their
             vehicle inventory, information, and images. Helping CDK compete with online retailers such as Carvana.
@@ -49,21 +44,20 @@ function Resume() {
     Consistent hashing distributes the requests to multiple shards. Within shards, gossip will spread requests.
     Hashing and load balancing written in Rust, data consistency code written in Python.
     <br />
-            <b>Deduplicating Fork of Berkeley FFS (spring 2021)</b>Designed and forked a version of the Berkeley Fast File System to handle logical block deduplication.
-    Wrote and updated deduped inodes to disk by editing existing newfs, FFS, and UFS code
-    All writes, reads, and deletions were sent through an added layer with minimal performance cost to reduce the amount of replicated data on the system.
+            <b>Deduplicating Fork of Berkeley FFS (spring 2021)</b>Engineered a fork of the Berkeley Fast File System to handle logical block deduplication.
+            All reads and writes are hashed and deduped, increasing storage capacity with added minimal latency.
 
-        <b> Multiplayer Online Game in Rust (summer 2020)</b>
-    Implemented game mechanics including player health, object collision, attacks, and movement coordination which is synchronized via an Actix web socket server.
+        <b> Multiplayer Online Game from Scratch (summer 2020)</b>
+    Implemented game mechanics including player health, object collision, attacks, and movement coordination which is synchronized via an rust Actix web socket server.
 
     <b>HTTP server and load balancer (spring 2020)</b>
     Designed and implemented a multi-threaded HTTP server and load balancer in C capable of distributing concurrent requests safely and efficiently.
     <br></br><br></br>
         <h3>Skills</h3>
         <p><b>Profficent Programming Lanugages</b> Rust, Python, C & Java<br></br>
-        <b>Experience with</b> Go, Node, C++ & Bash<br></br>
-        <b>Operating Systems</b> Linux, Macos & FreeBSD<br></br>
-        <b>Developer Tools</b> AWS, Docker, Git, </p>
+        <b>Experience with</b> Go, Haskell, C++, Node & Bash<br></br>
+        <b>Interested in</b> Systems Programming, Distributed Systems, Security & PL <br></br>
+        <b>Developer Tools</b> AWS, Linux, Docker & Git</p>
 
         </div>
       </div>
