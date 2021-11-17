@@ -13,7 +13,7 @@ function Home() {
     <div className="App">
       <header className="App-header" >  
         <div className="WallPaper">
-            <span className="Welcome">Hi, I am Jake</span>
+            <span className="Welcome">Hello, I'm Jake</span>
             <Typist style={{width:'50%', textAlign:'left'}} cursor={{ hideWhenDone: true,  }}>
                 I am a software engineer, CS student, and lover of sushi.
             </Typist>

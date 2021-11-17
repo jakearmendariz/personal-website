@@ -45,6 +45,11 @@ const drawFlames = (p, rocket, flame) => {
       }
 }
 
+const drawExplosion = (p, x, y, radius) => {
+    p.fill(255, 180, 0);
+    p.ellipse(x, y, radius, radius);
+}
+
 const drawRocket = (p, rocket, flame) => {
   drawRocketBase(p, rocket);
   drawWingsAndTip(p, rocket);
@@ -152,6 +157,9 @@ export default function sketch(p){
     let shots,flame;
     let tiltSpeed;
     let gameStarted;
+    let explosionPresent;
+    let explosionWidth;
+    let explosionX, explosionY;
     let asteroids;
     let score;
 
@@ -161,6 +169,10 @@ export default function sketch(p){
       direction = 0;
       moving = false;
       tilting = false;
+      explosionPresent = false;
+      explosionWidth = 0;
+      explosionX = 0;
+      explosionY = 0;
       tiltSpeed = 0;
       rocket = new Rocket(
         p.windowWidth/2,
@@ -181,17 +193,13 @@ export default function sketch(p){
     }
 
     function onOrientationChange(e) {
-        let alpha = e.alpha;
-        let beta = e.beta;
         let gamma = e.gamma;
         if(gamma === 0) {
             tilting = false;
-        } else {
-            
+        } else {  
             tilting = true;
             tiltSpeed = e.gamma;
         }
-        console.log(alpha + " " + beta + " " + gamma);
     }
 
     function updateAsteroids() {
@@ -231,6 +239,10 @@ export default function sketch(p){
                 score = 0;
                 asteroids = buildAsteroids(p, 6);
                 gameStarted = false;
+                explosionPresent = true;
+                explosionWidth = 0;
+                explosionX = rocket.x;
+                explosionY = rocket.y;
             }
             else if(checkShotCollisons(asteroids[i])) {
                 if (asteroids[i].health === 1) {
@@ -263,6 +275,7 @@ export default function sketch(p){
 
     function addShot() {
         gameStarted = true;
+        explosionPresent = false;
         let sx = Math.round(rocket.x + rocket.width / 2) - 3;
         let sy = Math.round(rocket.y - rocket.height * (1 / 2));
         shots.push([sx,sy]);
@@ -332,10 +345,18 @@ export default function sketch(p){
         flame = !flame;
     }
 
+    function updateExplosion() {
+        if (explosionPresent) {
+            explosionWidth += 10;
+            drawExplosion(p, explosionX, explosionY, explosionWidth);
+        }
+    }
+
     p.draw = () => {
         p.background(13,61,90);
-        checkCollisons()
-        updateRocket()
+        checkCollisons();
+        updateRocket();
+        updateExplosion();
         drawRocket(p, rocket, flame);
         drawShots(p, shots);
     }

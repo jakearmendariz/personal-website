@@ -1,6 +1,5 @@
 import './css/Secret.css';
 
-
 function Secret() {
   return (
     <div className="Secret">
