@@ -236,7 +236,6 @@ export default function sketch(p){
     function checkCollisons() {
         for (let i = 0; i < asteroids.length; i ++) {
             if(checkRocketCollisons(asteroids[i])) {
-                score = 0;
                 asteroids = buildAsteroids(p, 6);
                 gameStarted = false;
                 explosionPresent = true;
@@ -275,7 +274,10 @@ export default function sketch(p){
 
     function addShot() {
         gameStarted = true;
-        explosionPresent = false;
+        if (explosionPresent) {
+            score = 0;
+            explosionPresent = false;
+        }
         let sx = Math.round(rocket.x + rocket.width / 2) - 3;
         let sy = Math.round(rocket.y - rocket.height * (1 / 2));
         shots.push([sx,sy]);
@@ -349,6 +351,8 @@ export default function sketch(p){
         if (explosionPresent) {
             explosionWidth += 10;
             drawExplosion(p, explosionX, explosionY, explosionWidth);
+            p.fill(255, 255, 255);
+            p.text(score, 0.98 * p.width-30, 0.05 * p.height);
         }
     }
 
