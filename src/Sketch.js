@@ -15,8 +15,20 @@ const drawRocketBase = (p, rocket) => {
 const drawWingsAndTip = (p, rocket) => {
     const r = 160, g = 1, b = 70;
     p.fill(r, g, b);
-    p.triangle(rocket.x,rocket.y,rocket.x + rocket.width / 2,rocket.y - rocket.height * (7 / 16),rocket.x + rocket.width,rocket.y);
-    p.ellipse(rocket.x + rocket.width / 2, rocket.y + rocket.height * 0.01, rocket.width, rocket.height * 0.2);
+    p.triangle(
+        rocket.x,
+        rocket.y,
+        rocket.x + rocket.width / 2,
+        rocket.y - rocket.height * (6 / 16),
+        rocket.x + rocket.width,
+        rocket.y
+    );
+    p.ellipse(
+        rocket.x + rocket.width / 2, 
+        rocket.y + rocket.height * 0.01, 
+        rocket.width, 
+        rocket.height * 0.2
+    );
     p.fill(r + 20, g + 20, b + 20);
     p.triangle(rocket.x,rocket.y + rocket.height,rocket.x - rocket.width / 2,rocket.y + rocket.height,
         rocket.x,rocket.y + rocket.height / 4);
@@ -93,8 +105,8 @@ class Rocket {
         this.height = height;
 
         this.speed = 0.010 * width;
-        this.height = height * 0.085;
-        this.width = this.height*(50 / 175);
+        this.height = height * 0.1;
+        this.width = this.height*(45 / 175);
     }
 }
 
@@ -274,7 +286,7 @@ export default function sketch(p){
 
     function addShot() {
         gameStarted = true;
-        if (explosionPresent) {
+        if (!explosionPresent) {
             score = 0;
             explosionPresent = false;
         }

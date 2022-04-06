@@ -1,5 +1,6 @@
 import Home from './Home.js';
 import Secret from './Secret.js';
+import Colors from './Colors.js';
 import Resume from './Resume.js';
 import Strava from './Strava.js';
 import React, { useEffect } from 'react'
@@ -23,6 +24,9 @@ function App() {
           </Route>
           <Route path="/strava">
             <Strava />
+          </Route>
+          <Route path="/colors">
+            <Colors />
           </Route>
           <Route path="/">
             <div style={{backgroundColor:'black', overflow: 'hidden', margin: 0}}>

@@ -1,6 +1,5 @@
 import './css/Secret.css';
-import {Redirect,useHistory} from 'react-router-dom';
-import Strava from './Strava.js';
+import {useHistory} from 'react-router-dom';
 import React, { useState } from 'react'
 
 const Secret = () => {
@@ -11,9 +10,12 @@ const Secret = () => {
   };
   const secretFunction = (e) => {
     let secretPassphrase = e.target.elements.secret.value;
-    if (secretPassphrase == "strava") {
+    if (secretPassphrase === "strava") {
       history.push("/strava");
-    } else {
+    } else if(secretPassphrase === "colors") {
+      history.push("/colors");
+    }
+    else {
       e.preventDefault();
       setInputValue("");
     }
