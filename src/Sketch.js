@@ -286,7 +286,7 @@ export default function sketch(p){
 
     function addShot() {
         gameStarted = true;
-        if (!explosionPresent) {
+        if (explosionPresent) {
             score = 0;
             explosionPresent = false;
         }

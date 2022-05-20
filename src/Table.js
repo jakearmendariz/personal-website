@@ -38,14 +38,18 @@ const customStyles = {
 const Table = (props) => {
     console.log("NAME", props.name);
     console.log("TABLE", props.table)
+    const hiddenColumns = new Set(["date_value", "elapsed_time", "id", "seconds", "pace"]);
     const buildColumns = () => {
         let columns = [];
         for (const column_name of Object.keys(props.table[0])) {
+            if (hiddenColumns.has(column_name)) {
+                continue;
+            }
             columns.push({
                 name: column_name,
                 selector: row => row[column_name],
                 sortable: true,
-            })
+            });
         }
         return columns;
     }
