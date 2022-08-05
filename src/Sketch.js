@@ -147,6 +147,9 @@ const drawShots = (p, shots) => {
     p.fill(255, 238, 0);
     for (let i = 0; i < shots.length; i++) {
         p.rect(shots[i][0], shots[i][1], 6, 20);
+        if (shots[i][1] < 0) {
+            shots.splice(i, 1);
+        }
     }
 }
 
@@ -214,6 +217,11 @@ export default function sketch(p) {
     }
 
     function updateAsteroids() {
+        asteroids.map((asteroid) => asteroid.y += asteroid.speed)
+    }
+
+    // Every 50 displays check if stuffs off the map
+    function offTheMap() {
         if (gameCounter % 50 === 0) {
             for (let i = 0; i < asteroids.length; i++) {
                 asteroids[i].y += asteroids[i].speed
@@ -221,10 +229,12 @@ export default function sketch(p) {
                     asteroids[i] = buildAsteroid(p);
                 }
             }
-        } else {
-            asteroids.map((asteroid, i) => asteroid.y += asteroid.speed)
+            for (let i = 0; i < shots.length; i++) {
+                if (shots[i][1] < 0 ) {
+                    shots.splice(i, 1);
+                }
+            }
         }
-
     }
 
     function checkRocketCollisons(asteroid) {
@@ -373,6 +383,7 @@ export default function sketch(p) {
         checkCollisons();
         updateRocket();
         updateExplosion();
+        offTheMap();
         drawRocket(p, rocket, flame);
         drawShots(p, shots);
         gameCounter += 1;
