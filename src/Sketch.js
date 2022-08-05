@@ -302,8 +302,12 @@ export default function sketch(p) {
     function addShot() {
         gameStarted = true;
         if (explosionPresent) {
-            score = 0;
-            explosionPresent = false;
+            if (explosionWidth > p.height) {
+                score = 0;
+                explosionPresent = false;
+            } else {
+                gameStarted = false;
+            }
         }
         let sx = Math.round(rocket.x + rocket.width / 2) - 3;
         let sy = Math.round(rocket.y - rocket.height * (1 / 2));
