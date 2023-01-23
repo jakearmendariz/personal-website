@@ -28,6 +28,9 @@ function Resume() {
             <h3>
                 Work Experience
             </h3>
+            <b>Google SWE</b>
+                Working on Google Drive starting October 3rd.
+            <br />
             <b>Facebook Fall 2021</b>
                 Built process trees to assist in invesitgating malware detected by MsDefender.
                 Collaborated with Security Engineers and product to create a good UI and fast execution.

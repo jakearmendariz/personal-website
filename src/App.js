@@ -3,6 +3,7 @@ import Secret from './Secret.js';
 import Colors from './Colors.js';
 import Resume from './Resume.js';
 import Strava from './Strava.js';
+import MyChess from './MyChess.js';
 import React, { useEffect } from 'react'
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 
@@ -27,6 +28,9 @@ function App() {
           </Route>
           <Route path="/colors">
             <Colors />
+          </Route>
+          <Route path="/chess">
+            <MyChess />
           </Route>
           <Route path="/">
             <div style={{backgroundColor:'black', overflow: 'hidden', margin: 0}}>
