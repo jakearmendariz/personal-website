@@ -1,6 +1,7 @@
 // Preloaded image objects
-let planet, ast, sun;
+// import {BoidState, updateBoids, buildInitialBoids} from './Boids.js';
 
+let planet, ast, sun;
 
 const drawRocketBase = (p, rocket) => {
     p.fill(220, 220, 220);
@@ -68,6 +69,15 @@ const drawRocket = (p, rocket, flame) => {
     drawWingsAndTip(p, rocket);
     drawFlames(p, rocket, flame);
 }
+
+// const drawBoids = (p, boids) => {
+//     boids.forEach(boid => drawBoid(p, boid));
+// }
+
+// const drawBoid = (p, boid) => {
+//     p.fill(255, 255, 255);
+//     p.ellipse(boid.x, boid.y, 10, 10);
+// }
 
 function random(min, max) {
     min = Math.ceil(min);
@@ -165,6 +175,8 @@ export default function sketch(p) {
     let asteroids;
     let score;
     let gameCounter;
+    // let boids;
+    // let boidState;
 
 
     p.preload = () => {
@@ -197,7 +209,13 @@ export default function sketch(p) {
         gameStarted = false;
         score = 0;
         // Number of updates
-        gameCounter = 0;
+        // gameCounter = 0;
+        // boids = buildInitialBoids(50, p.windowWidth, p.windowHeight);
+        
+        // boidState = new BoidState(0.05, 0.005, 0.05, 300,  p.windowWidth, p.windowHeight);
+        // //console.log(boids)
+        // updateBoids(boids, boidState);
+        //console.log(boids)
 
         requestDeviceOrientation()
         // device orientation
@@ -295,7 +313,7 @@ export default function sketch(p) {
                 .catch(console.error);
         } else {
             // handle regular non iOS 13+ devices
-            console.log("not iOS");
+            //console.log("not iOS");
         }
     }
 
@@ -387,9 +405,11 @@ export default function sketch(p) {
         checkCollisons();
         updateRocket();
         updateExplosion();
+        // updateBoids(boids, boidState);
         offTheMap();
         drawRocket(p, rocket, flame);
         drawShots(p, shots);
+        // drawBoids(p, boids);
         gameCounter += 1;
     }
 }
