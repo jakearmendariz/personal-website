@@ -189,6 +189,7 @@ export default function sketch(p) {
         p.createCanvas(p.windowWidth, p.windowHeight);
         p.noStroke();
         direction = 0;
+        gameCounter = 0;
         moving = false;
         tilting = false;
         explosionPresent = false;
@@ -240,7 +241,7 @@ export default function sketch(p) {
 
     // Every 50 displays check if stuffs off the map
     function offTheMap() {
-        if (gameCounter % 50 === 0) {
+        if (gameCounter % 20 === 0) {
             for (let i = 0; i < asteroids.length; i++) {
                 asteroids[i].y += asteroids[i].speed
                 if (asteroids[i].y > (p.height * 1.3)) {
