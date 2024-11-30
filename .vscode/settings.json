@@ -1,0 +1,7 @@
+{
+    "IDX.aI.enableInlineCompletion": true,
+    "IDX.aI.enableCodebaseIndexing": true,
+    // This may help with setting NODE_OPTIONS=--openssl-legacy-provider
+    // for running this in idx.
+    "terminal.integrated.shellIntegration.enabled": false
+}

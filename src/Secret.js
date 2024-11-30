@@ -14,6 +14,8 @@ const Secret = () => {
       history.push("/strava");
     } else if(secretPassphrase === "colors") {
       history.push("/colors");
+    } else if(secretPassphrase === "habits") {
+      history.push("/habits");
     }
     else {
       e.preventDefault();

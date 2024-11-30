@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^12.8.3",
     "bootstrap": "^5.0.2",
     "chess.js": "^0.12.1",
+    "firebase": "^11.0.2",
     "p5": "^1.4.0",
     "react": "^17.0.2",
     "react-bootstrap": "^1.6.1",
