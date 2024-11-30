@@ -7,6 +7,7 @@ import {Link} from 'react-router-dom';
 import sketch from './Sketch.js'
 import P5Wrapper from 'react-p5-wrapper';
 
+// PUBLIC_URL=https://jakearmendariz-com.web.app/
 
 function Home() {
   return (
