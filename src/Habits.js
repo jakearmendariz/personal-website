@@ -1,6 +1,6 @@
 import './css/App.css';
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { httpsCallable, getFunctions } from "firebase/functions"; // Import for callable functions
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -10,12 +10,14 @@ const firebaseConfig = {
     storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
     messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
     appId: process.env.REACT_APP_FIREBASE_APP_ID,
-    measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID 
-  };
+    measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
+};
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const functions = getFunctions(app);
+// const functions = require("firebase-functions");
+
 
 function Habits() {
     return (
@@ -23,6 +25,14 @@ function Habits() {
             <header className="App-header" >
                 <div className="WallPaper">
                     <form onSubmit={handleSubmit} id="habits-form">
+                        <label for="username">Username</label>
+                        <br />
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                        />
+
                         <label for="happiness">How happy were you today?</label>
                         <br />
                         <input
@@ -76,27 +86,36 @@ function Habits() {
 
 const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission
-  
+
     try {
-      const happiness = document.getElementById("happiness").value;
-      const drinks = document.getElementById("drinks").value;
-      const work = document.getElementById("work").value;
-      const social = document.getElementById("social").value;
-  
-      // Add data to Firestore
-      await addDoc(collection(db, "habits"), {
-        happiness: happiness,
-        drinks: drinks,
-        work: work,
-        social: social,
-        timestamp: new Date() // Optional: Add a timestamp
-      });
-  
-      // Clear form
-      document.getElementById("habits-form").reset();
+        const username = document.getElementById("username").value;
+        const happiness = document.getElementById("happiness").value;
+        const drinks = document.getElementById("drinks").value;
+        const work = document.getElementById("work").value;
+        const social = document.getElementById("social").value;
+
+        // Call the Cloud Function
+        const addHabit = httpsCallable(functions, "addHabit"); // Get callable function
+        const data = {
+            username: username,
+            happiness: happiness,
+            drinks: drinks,
+            work: work,
+            social: social
+        };
+        console.log("Inserting data: " + JSON.stringify(data));
+        const result = await addHabit(data);
+
+        if (result.data.success) {
+            // Clear form
+            document.getElementById("habits-form").reset();
+        } else {
+            // Handle error (e.g., display an error message)
+            console.error("Error adding habit:", result.data.error);
+        }
     } catch (error) {
-      console.error("Error adding document: ", error);
-      // Handle errors (e.g., display an error message)
+        console.error("Error calling Cloud Function:", error);
+        // Handle errors (e.g., display an error message)
     }
-  };
+};
 export default Habits;

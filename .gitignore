@@ -25,5 +25,5 @@ yarn-error.log*
 \.firebase/
 
 .env
-
+firebase-debug.log
 src/SecretStuff.js

@@ -1,5 +1,10 @@
 {
   "projects": {
     "default": "jakearmendariz-com"
+  },
+  "functions": {
+    "predeploy": [
+      "if [ \"$DISABLE_LINTING\" != \"true\" ]; then npm --prefix functions run lint; fi"
+    ]
   }
 }
