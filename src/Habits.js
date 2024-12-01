@@ -32,6 +32,7 @@ function Habits() {
                             id="username"
                             name="username"
                         />
+                        <br />
 
                         <label for="happiness">How happy were you today?</label>
                         <br />
