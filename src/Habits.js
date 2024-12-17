@@ -86,8 +86,6 @@ function Habits() {
 }
 
 const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent default form submission
-
     try {
         const username = document.getElementById("username").value;
         const happiness = document.getElementById("happiness").value;
@@ -113,46 +111,6 @@ const handleSubmit = async (e) => {
         } else {
             // Handle error (e.g., display an error message)
             console.error("Error adding habit:", result.data.error);
-        }
-    } catch (error) {
-        console.error("Error calling Cloud Function:", error);
-        // Handle errors (e.g., display an error message)
-    }
-};
-
-const ADD_HABIT_FUNCTION_URL = "https://addhabit-elo5gihcwa-uc.a.run.app";
-const deprecatedSubmit = async (e) => {
-    e.preventDefault(); // Prevent default form submission
-
-    try {
-        const username = document.getElementById("username").value;
-        const happiness = document.getElementById("happiness").value;
-        const drinks = document.getElementById("drinks").value;
-        const work = document.getElementById("work").value;
-        const social = document.getElementById("social").value;
-
-        // Call the Cloud Function
-        const data = {
-            username: username,
-            happiness: happiness,
-            drinks: drinks,
-            work: work,
-            social: social
-        };
-        console.log("Inserting data: " + JSON.stringify(data));
-        const response = await fetch(ADD_HABIT_FUNCTION_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data),
-        });
-        // const result = await addHabit(data);
-
-        if (response.ok) {
-            // Clear form
-            document.getElementById("habits-form").reset();
-        } else {
-            // Handle error (e.g., display an error message)
-            console.error("Error adding habit:", response.text);
         }
     } catch (error) {
         console.error("Error calling Cloud Function:", error);
