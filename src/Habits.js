@@ -41,7 +41,7 @@ function Habits() {
                             id="happiness"
                             name="happiness"
                             min="0"
-                            max="5"
+                            max="10"
                         />
                         <br />
 
