@@ -16,6 +16,8 @@ const Secret = () => {
       history.push("/colors");
     } else if(secretPassphrase === "habits") {
       history.push("/habits");
+    } else if(secretPassphrase === "boids") {
+      history.push("/boids");
     }
     else {
       e.preventDefault();

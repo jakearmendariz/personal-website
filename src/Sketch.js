@@ -1,5 +1,5 @@
 // Preloaded image objects
-// import {BoidState, updateBoids, buildInitialBoids} from './Boids.js';
+import {Boid, BoidState, updateBoids} from './Boids.js';
 
 let planet, ast, sun;
 
@@ -153,6 +153,20 @@ const buildAsteroids = (p, n) => {
     return asteroids;
 }
 
+const drawBoid = (p, boid) => {
+    const size = p.width * 0.015;
+    const angle = Math.atan2(boid.dy, boid.dx);
+    const cos = (a) => Math.cos(angle + a);
+    const sin = (a) => Math.sin(angle + a);
+    p.fill(255, 60, 60);
+    p.beginShape();
+    p.vertex(boid.x + cos(0) * size,               boid.y + sin(0) * size);
+    p.vertex(boid.x + cos(Math.PI * 0.75) * size,  boid.y + sin(Math.PI * 0.75) * size);
+    p.vertex(boid.x + cos(Math.PI) * size * 0.35,  boid.y + sin(Math.PI) * size * 0.35);
+    p.vertex(boid.x + cos(-Math.PI * 0.75) * size, boid.y + sin(-Math.PI * 0.75) * size);
+    p.endShape(p.CLOSE);
+};
+
 const drawShots = (p, shots) => {
     p.fill(255, 238, 0);
     for (let i = 0; i < shots.length; i++) {
@@ -173,6 +187,7 @@ export default function sketch(p) {
     let explosionWidth;
     let explosionX, explosionY;
     let asteroids;
+    let boids, boidState, boidsActive, lastBoidWave;
     let score;
     let gameCounter;
     let orientationPermissionRequested = false;
@@ -207,6 +222,10 @@ export default function sketch(p) {
         shots = [];
         shotUpdate = 0.015 * p.height;
         asteroids = buildAsteroids(p, 8);
+        boids = [];
+        boidsActive = false;
+        lastBoidWave = 0;
+        boidState = new BoidState(0.05, 0.005, 0.05, 200, p.windowWidth, p.windowHeight);
         flame = false;
         gameStarted = false;
         score = 0;
@@ -279,17 +298,22 @@ export default function sketch(p) {
         return false;
     }
 
+    function triggerExplosion() {
+        gameStarted = false;
+        explosionPresent = true;
+        explosionWidth = 0;
+        explosionX = rocket.x;
+        explosionY = rocket.y;
+    }
+
     function checkCollisons() {
         for (let i = 0; i < asteroids.length; i++) {
             if (checkRocketCollisons(asteroids[i])) {
                 asteroids = buildAsteroids(p, 6);
-                gameStarted = false;
-                explosionPresent = true;
-                explosionWidth = 0;
-                explosionX = rocket.x;
-                explosionY = rocket.y;
-            }
-            else if (checkShotCollisons(asteroids[i])) {
+                boids = [];
+                boidsActive = false;
+                triggerExplosion();
+            } else if (checkShotCollisons(asteroids[i])) {
                 if (asteroids[i].health === 1) {
                     asteroids[i] = buildAsteroid(p);
                 } else {
@@ -297,10 +321,52 @@ export default function sketch(p) {
                 }
                 score += 10;
                 if (score % 100 === 0) {
-                    asteroids.push(buildAsteroid(p))
+                    asteroids.push(buildAsteroid(p));
                 }
             }
         }
+
+        if (boidsActive) {
+            const boidHitRadius = p.width * 0.015;
+            for (let i = boids.length - 1; i >= 0; i--) {
+                if (distance(boids[i].x, boids[i].y, rocket.x + rocket.width / 2, rocket.y + rocket.height / 2) < boidHitRadius) {
+                    boids = [];
+                    asteroids = buildAsteroids(p, 6);
+                    boidsActive = false;
+                    lastBoidWave = 0;
+                    triggerExplosion();
+                    break;
+                }
+                for (let j = shots.length - 1; j >= 0; j--) {
+                    if (distance(shots[j][0], shots[j][1], boids[i].x, boids[i].y) < boidHitRadius) {
+                        shots.splice(j, 1);
+                        boids.splice(i, 1);
+                        score += 20;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    function spawnBoidOffScreen() {
+        const r = Math.random();
+        const halfHeight = p.windowHeight * 0.5;
+        let x, y, dx, dy;
+        if (r < 0.6) {
+            x = Math.random() * p.windowWidth; y = -20;
+            dx = (Math.random() - 0.5) * 2;
+            dy = Math.random() * 2 + 1;
+        } else if (r < 0.8) {
+            x = p.windowWidth + 20; y = Math.random() * halfHeight;
+            dx = -(Math.random() * 2 + 1);
+            dy = (Math.random() - 0.5) * 2;
+        } else {
+            x = -20; y = Math.random() * halfHeight;
+            dx = Math.random() * 2 + 1;
+            dy = (Math.random() - 0.5) * 2;
+        }
+        return new Boid(x, y, dx, dy);
     }
 
     function requestOrientationPermission() {
@@ -412,11 +478,23 @@ export default function sketch(p) {
         checkCollisons();
         updateRocket();
         updateExplosion();
-        // updateBoids(boids, boidState);
         offTheMap();
         drawRocket(p, rocket, flame);
         drawShots(p, shots);
-        // drawBoids(p, boids);
+
+        if (gameStarted && score >= 100) {
+            if (!boidsActive) {
+                boids = Array.from({ length: 10 }, spawnBoidOffScreen);
+                boidsActive = true;
+                lastBoidWave = score;
+            } else if (score >= lastBoidWave + 1000) {
+                boids.push(...Array.from({ length: 10 }, spawnBoidOffScreen));
+                lastBoidWave = score;
+            }
+            updateBoids(boids, boidState);
+            boids.forEach(boid => drawBoid(p, boid));
+        }
+
         gameCounter += 1;
     }
 }
