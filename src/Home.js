@@ -1,5 +1,5 @@
 import './css/App.css';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SocialIcon } from 'react-social-icons';
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
@@ -10,14 +10,21 @@ import P5Wrapper from 'react-p5-wrapper';
 // PUBLIC_URL=https://jakearmendariz-com.web.app/
 
 function Home() {
-  const typistRef = useRef(null);
-  const [animate, setAnimate] = useState(false);
+  const fullText = 'I am a software engineer, CS student, and lover of sushi.';
+  const [displayed, setDisplayed] = useState('');
+  const [showCursor, setShowCursor] = useState(true);
 
   useEffect(() => {
-    if (typistRef.current) {
-      typistRef.current.style.setProperty('--text-width', typistRef.current.scrollWidth + 'px');
-      setAnimate(true);
-    }
+    let i = 0;
+    const interval = setInterval(() => {
+      i++;
+      setDisplayed(fullText.slice(0, i));
+      if (i >= fullText.length) {
+        clearInterval(interval);
+        setTimeout(() => setShowCursor(false), 600);
+      }
+    }, 3500 / fullText.length);
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -25,7 +32,10 @@ function Home() {
       <header className="App-header" >  
         <div className="WallPaper">
             <span className="Welcome">Hello, I'm Jake</span>
-            <span ref={typistRef} className={animate ? 'typewriter' : 'typewriter-measure'}>I am a software engineer, CS student, and lover of sushi.</span>
+            <span className="typewriter-text">
+              {displayed}
+              {showCursor && <span className="typewriter-cursor" />}
+            </span>
             <br />
             <Container className="socialIcons">
                 <Row style={{display: 'flex', justifyContent: 'center'}}>
