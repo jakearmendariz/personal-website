@@ -5,6 +5,7 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
 
+/** Double happiness */
 async function backfill() {
   const db = admin.firestore();
   const snapshot = await db.collection("habits").get();
@@ -13,9 +14,9 @@ async function backfill() {
   let count = 0;
 
   snapshot.forEach((doc) => {
-    const { happiness } = doc.data();
+    const {happiness} = doc.data();
     if (happiness !== undefined) {
-      batch.update(doc.ref, { happiness: happiness * 2 });
+      batch.update(doc.ref, {happiness: happiness * 2});
       count++;
     }
   });
