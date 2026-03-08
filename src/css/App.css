@@ -63,6 +63,7 @@
 
 .typewriter-text {
   font-family: monospace;
+  max-width: 80%;
 }
 
 .typewriter-cursor {
