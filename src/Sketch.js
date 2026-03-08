@@ -175,6 +175,7 @@ export default function sketch(p) {
     let asteroids;
     let score;
     let gameCounter;
+    let orientationPermissionRequested = false;
     // let boids;
     // let boidState;
 
@@ -218,9 +219,8 @@ export default function sketch(p) {
         // updateBoids(boids, boidState);
         //console.log(boids)
 
-        requestDeviceOrientation()
-        // device orientation
-        if (window.DeviceOrientationEvent) {
+        // Non-iOS devices: add listener directly
+        if (typeof DeviceOrientationEvent === 'undefined' || typeof DeviceOrientationEvent.requestPermission !== 'function') {
             window.addEventListener('deviceorientation', onOrientationChange);
         }
     }
@@ -303,18 +303,17 @@ export default function sketch(p) {
         }
     }
 
-    function requestDeviceOrientation() {
+    function requestOrientationPermission() {
+        if (orientationPermissionRequested) return;
+        orientationPermissionRequested = true;
         if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
             DeviceOrientationEvent.requestPermission()
                 .then(permissionState => {
                     if (permissionState === 'granted') {
-                        window.addEventListener('deviceorientation', () => { });
+                        window.addEventListener('deviceorientation', onOrientationChange);
                     }
                 })
                 .catch(console.error);
-        } else {
-            // handle regular non iOS 13+ devices
-            //console.log("not iOS");
         }
     }
 
@@ -347,7 +346,14 @@ export default function sketch(p) {
     }
 
     p.mousePressed = function () {
+        requestOrientationPermission();
         addShot();
+    }
+
+    p.touchStarted = function () {
+        requestOrientationPermission();
+        addShot();
+        return false;
     }
 
     function updateRocket() {
