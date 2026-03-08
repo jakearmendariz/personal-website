@@ -70,14 +70,6 @@ const drawRocket = (p, rocket, flame) => {
     drawFlames(p, rocket, flame);
 }
 
-// const drawBoids = (p, boids) => {
-//     boids.forEach(boid => drawBoid(p, boid));
-// }
-
-// const drawBoid = (p, boid) => {
-//     p.fill(255, 255, 255);
-//     p.ellipse(boid.x, boid.y, 10, 10);
-// }
 
 function random(min, max) {
     min = Math.ceil(min);
@@ -191,8 +183,6 @@ export default function sketch(p) {
     let score;
     let gameCounter;
     let orientationPermissionRequested = false;
-    // let boids;
-    // let boidState;
 
 
     p.preload = () => {
@@ -229,15 +219,6 @@ export default function sketch(p) {
         flame = false;
         gameStarted = false;
         score = 0;
-        // Number of updates
-        // gameCounter = 0;
-        // boids = buildInitialBoids(50, p.windowWidth, p.windowHeight);
-        
-        // boidState = new BoidState(0.05, 0.005, 0.05, 300,  p.windowWidth, p.windowHeight);
-        // //console.log(boids)
-        // updateBoids(boids, boidState);
-        //console.log(boids)
-
         // Non-iOS devices: add listener directly
         if (typeof DeviceOrientationEvent === 'undefined' || typeof DeviceOrientationEvent.requestPermission !== 'function') {
             window.addEventListener('deviceorientation', onOrientationChange);
@@ -255,7 +236,7 @@ export default function sketch(p) {
     }
 
     function updateAsteroids() {
-        asteroids.map((asteroid) => asteroid.y += asteroid.speed)
+        asteroids.forEach((asteroid) => asteroid.y += asteroid.speed)
     }
 
     // Every 50 displays check if stuffs off the map
@@ -433,7 +414,6 @@ export default function sketch(p) {
                     rocket.y += rocket.speed;
                 } else if (direction === 3) {
                     rocket.x -= rocket.speed;
-                } else {
                 }
             }
         } else {
@@ -460,7 +440,7 @@ export default function sketch(p) {
         } else if (rocket.y < 0) {
             rocket.y = 0;
         }
-        shots.map((shot) => shot[1] -= shotUpdate);
+        shots.forEach((shot) => shot[1] -= shotUpdate);
         flame = !flame;
     }
 
