@@ -17,7 +17,7 @@ const Strava = () => {
             loadData()
         }
     })
-    if (state == null || state == undefined) {
+    if (state == null || state === undefined) {
         return <h1>I'm confused, why did you come here. Go away</h1>
     }
     return <Table name="Jake's Strava" table={state} />
