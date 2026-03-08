@@ -66,6 +66,13 @@
   max-width: 80%;
 }
 
+@media (max-width: 600px) {
+  .WallPaper {
+    justify-content: flex-start;
+    padding-top: 25dvh;
+  }
+}
+
 .typewriter-cursor {
   display: inline-block;
   width: 0.6em;
