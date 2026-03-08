@@ -60,3 +60,33 @@
 .social-icon {
   margin:15px;
 }
+
+.typewriter-measure {
+  display: inline-block;
+  white-space: nowrap;
+  font-family: monospace;
+  visibility: hidden;
+}
+
+.typewriter {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  box-sizing: content-box;
+  font-family: monospace;
+  width: 0;
+  border-right: 0.6em solid rgb(232, 232, 232);
+  animation:
+    typing 4s steps(57, end) forwards,
+    cursor-hide 0s 4s forwards;
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: var(--text-width) }
+}
+
+@keyframes cursor-hide {
+  to { border-color: transparent }
+}
+

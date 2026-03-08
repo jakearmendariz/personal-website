@@ -1,5 +1,5 @@
 import './css/App.css';
-import Typist from 'react-typist';
+import { useEffect, useRef, useState } from 'react';
 import { SocialIcon } from 'react-social-icons';
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
@@ -10,14 +10,22 @@ import P5Wrapper from 'react-p5-wrapper';
 // PUBLIC_URL=https://jakearmendariz-com.web.app/
 
 function Home() {
+  const typistRef = useRef(null);
+  const [animate, setAnimate] = useState(false);
+
+  useEffect(() => {
+    if (typistRef.current) {
+      typistRef.current.style.setProperty('--text-width', typistRef.current.scrollWidth + 'px');
+      setAnimate(true);
+    }
+  }, []);
+
   return (
     <div className="App">
       <header className="App-header" >  
         <div className="WallPaper">
             <span className="Welcome">Hello, I'm Jake</span>
-            <Typist style={{width:'50%', textAlign:'left'}} cursor={{ hideWhenDone: true,  }}>
-                I am a software engineer, CS student, and lover of sushi.
-            </Typist>
+            <span ref={typistRef} className={animate ? 'typewriter' : 'typewriter-measure'}>I am a software engineer, CS student, and lover of sushi.</span>
             <br />
             <Container className="socialIcons">
                 <Row style={{display: 'flex', justifyContent: 'center'}}>
