@@ -43,11 +43,11 @@ function Home() {
                     <SocialIcon url="https://github.com/jakearmendariz" bgColor="#fafafa"  className=".social-icon" />
                     <SocialIcon url="https://www.linkedin.com/in/jake-armendariz/" fgColor="#fafafa" className=".social-icon" />
                 </Row>
-                <Link to="/resume">
-                    <button type="button" className="btn btn-dark btn-lg" style={{margin:'calc(7px + 0.7vw)'}}>Resume</button>
+                <Link to="/resume" style={{ position: 'relative', zIndex: 10000}}>
+                    <button type="button" className="btn btn-dark btn-lg" style={{margin:'calc(7px + 0.7vw)', zIndex: 10000}}>Resume</button>
                 </Link>
-                <Link to="/secret">
-                    <button type="button" className="btn btn-dark btn-lg" style={{margin:'calc(7px + 0.7vw)'}}>Secret</button>
+                <Link to="/secret" style={{ position: 'relative', zIndex: 10000}}>
+                    <button type="button" className="btn btn-dark btn-lg" style={{margin:'calc(7px + 0.7vw)', zIndex: 10000}}>Secret</button>
                 </Link>
             </Container>
         </div>
@@ -60,6 +60,7 @@ function Home() {
           width: "100%",
           height: "100%",
           zIndex:0,
+          pointerEvents: 'none'
         }}
       >
         <P5Wrapper sketch={sketch}></P5Wrapper>

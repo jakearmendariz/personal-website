@@ -400,7 +400,6 @@ export default function sketch(p) {
     p.touchStarted = function () {
         requestOrientationPermission();
         addShot();
-        return false;
     }
 
     function updateRocket() {
